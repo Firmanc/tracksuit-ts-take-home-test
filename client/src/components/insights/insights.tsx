@@ -14,11 +14,10 @@ export const Insights = ({ insights, className }: InsightsProps) => {
   return (
     <div className={cx(className)}>
       <h1 className={styles.heading}>Insights</h1>
-      <div className={styles.list}>
-        {insights?.length
-          ? (
-            insights.map(({ id, text, date, brandId }) => (
-              <div className={styles.insight} key={id}>
+      {insights?.length && (
+        <ul className={styles.list}>
+          {insights.map(({ id, text, date, brandId }) => (
+              <li className={styles.insight} key={id}>
                 <div className={styles["insight-meta"]}>
                   <span>{brandId}</span>
                   <div className={styles["insight-meta-details"]}>
@@ -30,11 +29,11 @@ export const Insights = ({ insights, className }: InsightsProps) => {
                   </div>
                 </div>
                 <p className={styles["insight-content"]}>{text}</p>
-              </div>
-            ))
-          )
-          : <p>We have no insight!</p>}
-      </div>
+              </li>
+            ))}
+        </ul>
+      )}
+      {!insights?.length && <p>We have no insight!</p>}
     </div>
   );
 };
