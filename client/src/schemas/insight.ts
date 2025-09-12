@@ -5,6 +5,7 @@ export const Insight = z.object({
   brandId: z.number().int().min(0),
   date: z.date(),
   text: z.string(),
+  optimistic: z.boolean().optional(),
 });
 
 export type Insight = z.infer<typeof Insight>;

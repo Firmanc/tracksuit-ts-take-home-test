@@ -11,21 +11,23 @@ type InsightsProps = {
 export const Insights = ({ insights, className }: InsightsProps) => {
   const deleteInsight = () => undefined;
 
+  console.log('DWDASDSA', { insights });
+
   return (
     <div className={cx(className)}>
       <h1 className={styles.heading}>Insights</h1>
       {insights?.length && (
         <ul className={styles.list}>
-          {insights.map(({ id, text, date, brandId }) => (
+          {insights.map(({ id, text, date, brandId, optimistic }) => (
               <li className={styles.insight} key={id}>
                 <div className={styles["insight-meta"]}>
                   <span>{brandId}</span>
                   <div className={styles["insight-meta-details"]}>
                     <span>{date.toString()}</span>
-                    <Trash2Icon
+                    {!optimistic && <Trash2Icon
                       className={styles["insight-delete"]}
                       onClick={deleteInsight}
-                    />
+                    />}
                   </div>
                 </div>
                 <p className={styles["insight-content"]}>{text}</p>
