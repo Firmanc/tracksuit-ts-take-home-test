@@ -5,7 +5,7 @@ describe("InsightsApi", () => {
   let fetchMock: any;
 
   beforeEach(() => {
-    fetchMock = vi.spyOn(global, "fetch");
+    fetchMock = vi.spyOn(globalThis, "fetch");
   });
 
   test("should fetch insights", async () => {

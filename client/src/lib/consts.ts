@@ -6,3 +6,5 @@ export const BRANDS = [
   { id: 5, name: "Brand 5" },
   { id: 6, name: "Brand 6" },
 ];
+
+export const BrandMap = new Map(BRANDS.map((brand) => [brand.id, brand.name]));
