@@ -8,3 +8,10 @@ export const Insight = z.object({
 });
 
 export type Insight = z.infer<typeof Insight>;
+
+export const InsertInsight = z.object({
+  brand: z.number().int().min(0),
+  text: z.string(),
+});
+
+export type InsertInsight = z.infer<typeof InsertInsight>;

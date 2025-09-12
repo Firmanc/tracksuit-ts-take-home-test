@@ -5,7 +5,9 @@ import * as path from "@std/path";
 import { Port } from "../lib/utils/index.ts";
 import listInsights from "./operations/list-insights.ts";
 import lookupInsight from "./operations/lookup-insight.ts";
+import insertInsights from "./operations/insert-insights.ts";
 import { createTable } from "./tables/insights.ts";
+import { InsertInsight } from "$models/insight.ts";
 
 console.log("Loading configuration");
 
@@ -44,8 +46,22 @@ router.get("/insights/:id", (ctx) => {
   ctx.response.status = 200;
 });
 
-router.get("/insights/create", (ctx) => {
-  // TODO
+router.post("/insights/create", async (ctx) => {
+  try {
+    const body = await ctx.request.body.json();
+    const newInsight = InsertInsight.parse(body);
+
+    const result = insertInsights({ db, newInsight });
+
+    ctx.response.status = 201;
+    ctx.response.body = JSON.stringify(result);
+  } catch (error) {
+    console.error("Error creating insight: ", error);
+    ctx.response.status = 400; // This ideally should be coming from the error payload.
+    ctx.response.body = { message: "Failed to create insight" };
+  } finally {
+    ctx.response.type = "application/json";
+  }
 });
 
 router.get("/insights/delete", (ctx) => {

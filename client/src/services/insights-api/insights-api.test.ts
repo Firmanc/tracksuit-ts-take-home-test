@@ -1,5 +1,5 @@
-import { InsightsApi } from "./index.ts";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+import { InsightsApi } from "./index.ts";
 
 describe("InsightsApi", () => {
   let fetchMock: any;
