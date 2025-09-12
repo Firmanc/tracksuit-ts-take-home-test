@@ -46,4 +46,10 @@ export class InsightsApi {
       text: item.text,
     });
   }
+
+  static async deleteInsight(id: number): Promise<void> {
+    await fetch(`${InsightsApi.BASE_URL}/${id}`, {
+      method: "DELETE",
+    });
+  }
 }

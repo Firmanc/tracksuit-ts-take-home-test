@@ -5,9 +5,10 @@ import * as path from "@std/path";
 import { Port } from "../lib/utils/index.ts";
 import listInsights from "./operations/list-insights.ts";
 import lookupInsight from "./operations/lookup-insight.ts";
-import insertInsights from "./operations/insert-insights.ts";
+import insertInsight from "./operations/insert-insight.ts";
 import { createTable } from "./tables/insights.ts";
 import { InsertInsight } from "$models/insight.ts";
+import deleteInsight from "./operations/delete-insight.ts";
 
 console.log("Loading configuration");
 
@@ -51,7 +52,7 @@ router.post("/insights/create", async (ctx) => {
     const body = await ctx.request.body.json();
     const newInsight = InsertInsight.parse(body);
 
-    const result = insertInsights({ db, newInsight });
+    const result = insertInsight({ db, newInsight });
 
     ctx.response.status = 201;
     ctx.response.body = JSON.stringify(result);
@@ -64,8 +65,19 @@ router.post("/insights/create", async (ctx) => {
   }
 });
 
-router.get("/insights/delete", (ctx) => {
-  // TODO
+router.delete("/insights/:id", (ctx) => {
+  try {
+    const params = ctx.params as Record<string, any>;
+    deleteInsight({ db, insightId: Number(params.id) });
+    ctx.response.status = 200;
+    ctx.response.body = { message: "Insight deleted" };
+  } catch (error) {
+    console.error("Error deleting insight: ", error);
+    ctx.response.status = 400; // This ideally should be coming from the error payload.
+    ctx.response.body = { message: "Failed to delete insight" };
+  } finally {
+    ctx.response.type = "application/json";
+  }
 });
 
 const app = new oak.Application();

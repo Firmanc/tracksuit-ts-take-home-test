@@ -9,6 +9,10 @@ type AddInsightProps = ModalProps & {
   addInsight: (insight: NewInsight) => void;
 };
 
+/**
+ * A modal form to add a new insight.
+ * @todo: Add form validation and error display
+ */
 export const AddInsight = ({ addInsight , ...props }: AddInsightProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -21,7 +25,6 @@ export const AddInsight = ({ addInsight , ...props }: AddInsightProps) => {
     });
 
     if (!newInsight.success) {
-      // TODO: Show form validation errors
       return;
     }
 

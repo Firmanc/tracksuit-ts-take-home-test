@@ -2,7 +2,7 @@ import { describe, it } from "jsr:@std/testing/bdd";
 import { expect } from "jsr:@std/expect";
 import { withDB } from "../testing.ts";
 import type { Insight } from "$models/insight.ts";
-import insertInsight from "./insert-insights.ts";
+import insertInsight from "./insert-insight.ts";
 
 describe("insert insights into the database", () => {
   withDB((fixture) => {
