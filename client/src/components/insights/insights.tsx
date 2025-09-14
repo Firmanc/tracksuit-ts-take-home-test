@@ -3,17 +3,25 @@ import { cx } from "../../lib/cx.ts";
 import styles from "./insights.module.css";
 import type { Insight } from "../../schemas/insight.ts";
 import { BrandMap } from "../../lib/consts.ts";
+import { Button } from "../button/button.tsx";
 
 type InsightsProps = {
   deleteInsight: (id: number) => void;
   insights: Insight[];
   className?: string;
+  isLoading?: boolean;
 };
 
-export const Insights = ({ insights, className, deleteInsight }: InsightsProps) => (
+export const Insights = ({
+  insights,
+  className,
+  deleteInsight,
+  isLoading = false,
+}: InsightsProps) => (
   <div className={cx(className)}>
     <h1 className={styles.heading}>Insights</h1>
-    {Boolean(insights?.length) && (
+    {isLoading && <p>Loading insights...</p>}
+    {!isLoading && Boolean(insights?.length) && (
       <ul className={styles.list}>
         {insights.map(({ id, text, date, brandId, optimistic }) => (
             <li className={styles.insight} key={id}>
@@ -21,10 +29,14 @@ export const Insights = ({ insights, className, deleteInsight }: InsightsProps) 
                 <span>{BrandMap.get(brandId)}</span>
                 <div className={styles["insight-meta-details"]}>
                   <span>{date.toString()}</span>
-                  {!optimistic && <Trash2Icon
-                    className={styles["insight-delete"]}
-                    onClick={() => deleteInsight(id)}
-                  />}
+                  {!optimistic && (
+                    <Button label="Delete Insight" theme="tertiary" onClick={() => deleteInsight(id)}>
+                      <Trash2Icon
+                        className={styles["insight-delete"]}
+                        aria-label="Delete Insight"
+                      />
+                    </Button>
+                  )}
                 </div>
               </div>
               <p className={styles["insight-content"]}>{text}</p>
@@ -32,6 +44,6 @@ export const Insights = ({ insights, className, deleteInsight }: InsightsProps) 
           ))}
       </ul>
     )}
-    {!insights?.length && <p>We have no insight!</p>}
+    {!isLoading && !insights?.length && <p>We have no insight!</p>}
   </div>
 );

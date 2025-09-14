@@ -7,7 +7,7 @@ import type { NewInsight } from "../../schemas/insight.ts";
 export const HEADER_TEXT = "Suit Tracker Insights";
 
 export type AddInsightProps = {
-  addInsight: (insight: NewInsight) => void;
+  addInsight: (insight: NewInsight) => Promise<void>;
 };
 
 export const Header = ({ addInsight }: AddInsightProps) => {

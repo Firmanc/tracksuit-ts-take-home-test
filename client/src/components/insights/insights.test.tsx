@@ -14,12 +14,12 @@ const TEST_INSIGHTS = [
 
 describe("insights", () => {
   it("Should render insights", () => {
-    const { getByRole, getAllByRole } = render(<Insights insights={TEST_INSIGHTS} />);
+    const { getByRole, getAllByRole } = render(<Insights insights={TEST_INSIGHTS} deleteInsight={() => {}} />);
     expect(getByRole("list")).toBeDefined();
     expect(getAllByRole("listitem")).toHaveLength(TEST_INSIGHTS.length);
   });
   it("Should render no insights message", () => {
-    const { getByText } = render(<Insights insights={[]} />);
+    const { getByText } = render(<Insights insights={[]} deleteInsight={() => {}} />);
     expect(getByText("We have no insight!")).toBeDefined();
   });
 });

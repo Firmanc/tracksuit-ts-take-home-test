@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useActionState } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { NewInsight } from "../../schemas/insight.ts";
 import { Button } from "../button/button.tsx";
@@ -6,38 +6,36 @@ import { Modal, type ModalProps } from "../modal/modal.tsx";
 import styles from "./add-insight.module.css";
 
 type AddInsightProps = ModalProps & {
-  addInsight: (insight: NewInsight) => void;
+  addInsight: (insight: NewInsight) => Promise<void>;
 };
 
 /**
  * A modal form to add a new insight.
- * @todo: Add form validation and error display
  */
 export const AddInsight = ({ addInsight , ...props }: AddInsightProps) => {
-  const formRef = useRef<HTMLFormElement>(null);
+  const [error, submitAction] = useActionState(
+    async (_: unknown, formData: FormData) => {
+      const newInsight = NewInsight.safeParse({
+        brandId: Number(formData.get("brand")),
+        text: String(formData.get("text")),
+      });
 
-  const formAction = (formData: FormData) => {
-    if (!formRef.current) return;
-
-    const newInsight = NewInsight.safeParse({
-      brandId: Number(formData.get("brand")),
-      text: String(formData.get("text")),
-    });
-
-    if (!newInsight.success) {
-      return;
-    }
-
-    addInsight(newInsight.data);
-    props.onClose();
-  }
+      if (newInsight.error) {
+        return newInsight.error.toString();
+      }
+      
+      await addInsight(newInsight.data);
+      props.onClose();
+    },
+    null,
+  );
 
   return (
     <Modal {...props}>
       <h1 className={styles.heading}>Add a new insight</h1>
-      <form ref={formRef} className={styles.form} action={formAction}>
+      <form className={styles.form} action={submitAction}>
         <label className={styles.field} htmlFor="brand">
-          Associated brand
+          Select brand
           <select className={styles["field-input"]} name="brand" id="brand" defaultValue="">
             {BRANDS.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
           </select>
@@ -52,6 +50,7 @@ export const AddInsight = ({ addInsight , ...props }: AddInsightProps) => {
             placeholder="Something insightful..."
           />
         </label>
+        {error && <p>{error}</p>}
         <Button className={styles.submit} type="submit" label="Add insight" data-testid="add-insight-submit" />
       </form>
     </Modal>

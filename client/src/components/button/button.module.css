@@ -25,4 +25,7 @@
     color: currentColor;
     border: 1px solid;
   }
+  &.tertiary {
+    padding: 0;
+  }
 }
